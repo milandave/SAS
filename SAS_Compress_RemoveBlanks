@@ -1,0 +1,24 @@
+/*remove blanks from within a string and reformat post code*/
+
+data testpostcode;
+input pcode $20.;
+cards;
+AB24  5LB
+AB 5 5 5 L B
+EH1 14 A   T
+EH114LQ
+E H 1 1 5 L M
+;
+run;
+
+data correct_post_code;
+set testpostcode;
+length v1 v2 $4;
+len1 = length(pcode);
+pcode2 = compress(pcode);
+len2 = length(pcode2);
+v1 = substr(pcode2, 1,4);
+v2 = substr(pcode2,5,3);
+correct_pcode = v1||''||v2;
+len_correct_pcode = length(correct_pcode);
+run;
