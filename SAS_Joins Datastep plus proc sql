@@ -1,0 +1,152 @@
+data t1;
+input ID Name $ Height ;
+cards;
+1 A 1
+3 B 2
+5 C 2
+7 D 2
+9 E 2
+; 
+run;
+
+proc sort data=t1; by ID; run;
+
+data t2;
+input ID Name $ Weight ;
+cards;
+2 A 2
+4 B 3
+5 C 4
+7 D 5
+; 
+run;
+
+proc sort data=t2; by ID; run; 
+
+/* Cartesian aka Cross Join */
+proc sql;
+create table del as 
+select * from t1 cross join t2;
+quit;
+
+
+/****************************************/
+/* INNER JOIN */
+/* USING DATA STEP */
+data del;
+merge work.t1 (in=a)
+work.t2 (in=b);
+by ID;
+if a & b; /* this tells SAS to show output only if observation in both ds a & b */
+run;
+
+
+/* USING PROC SQL STEP */
+/* ISSUE WITH PROC SQL - headers repeat if "create table <tname> as" is not added */
+proc sql;
+create table del as 
+select * from t1 as a 
+inner join t2 as b
+ON a.ID = b.ID;
+quit;
+
+
+/****************************************/
+/* LEFT JOIN */
+/* USING DATA STEP */
+data del;
+merge work.t1 (in=a)
+work.t2 (in=b);
+by ID;
+if a; /* this tells SAS to show output only if observation in both ds a & b */
+run;
+
+
+/* USING PROC SQL STEP */
+/* ISSUE WITH PROC SQL - headers repeat if "create table <tname> as" is not added */
+proc sql;
+create table del as 
+select * from t1 as a left join t2 as b 
+ON a.ID = b.ID;
+quit;
+
+
+/****************************************/
+/* RIGHT JOIN */
+/* USING DATA STEP */
+data del;
+merge work.t1(in=a) work.t2(in=b);
+by id;
+if b; /*this tells SAS to show all data from the right table */
+run;
+
+
+/* USING PROC SQL STEP */
+/* ISSUE WITH PROC SQL - headers repeat if "create table <tname> as" is not added */
+proc sql;
+create table del as 
+select * from t1 as a 
+left join t2 as b
+ON a.ID = b.ID;
+quit;
+
+
+/****************************************/
+/* FULL JOIN */
+/* USING DATA STEP */
+data del;
+merge work.t1(in=a) work.t2(in=b);
+by ID;
+quit;
+
+
+/* USING PROC SQL STEP */
+/* ISSUE WITH PROC SQL - headers repeat if "create table <tname> as" is not added */
+/* Coaleasce required to pass first non missing value; without which it might not report a field */
+proc sql;
+create TABLE del as 
+select coalesce (a.ID, b.ID) as ID, coalesce (a.Name, b.Name) as Name, Height, Weight
+from t1 as a
+right join t2 as b 
+ON a.ID = b.ID;
+quit;
+
+
+/****************************************/
+/* SELF JOIN */
+
+/* USING PROC SQL STEP */
+
+data t2;
+input Name $ ID ManagerID;
+ cards;
+ Smith 123 456
+ Robert 456 777
+ William 222 123
+ Daniel 777 .
+ Cook 383 456
+ ;
+ run;
+
+proc sort data=t2; by Managerid; run;
+
+
+/* STEP 1 - derive manager's manger id for each id */
+ proc sql;
+ create table del as 
+ Select a.*, b.managerid as MMID 
+ from t2 as a left join t2 as b
+ On a.managerid = b.id
+ ;
+ quit;
+
+
+/* STEP 2 - derive name of manager's manger id for each id */
+ proc sql;
+ create table del2 as 
+ select a.*, b.name as MMID_Name
+ from del as a left join del as b
+ ON a.MMID = b.ID
+ ;
+ quit;
+
