@@ -1,0 +1,12 @@
+/*array*/
+data test_array;
+set sashelp.pricedata;
+
+array price_CAD {17} price_CAD1-price_CAD17;
+array price_USD {17} price1-price17;
+
+do i = 1 to 17;
+	price_CAD{i} = price_USD{i} * 10;
+end;
+
+run;
