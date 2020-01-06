@@ -1,0 +1,11 @@
+%macro test2;
+
+%let d1 = '01Jan2019'd;
+%let d2 = '30Sep2019'd;
+
+%let d1 =  %sysfunc(putn(&d1.,date9.)) ; 
+
+%put &d1.;
+
+%mend;
+%test2;
