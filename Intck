@@ -1,0 +1,12 @@
+data temp;
+date1 = '01Jan2019'd;
+date2 = '30Sep2019'd;
+no_of_years  = intck ('YEAR', date1, date2);
+no_of_semiyears  = intck ('SEMIYEAR', date1, date2);
+no_of_quarters  = intck ('QUARTER', date1, date2);
+no_of_months  = intck ('MONTH', date1, date2);
+no_of_weeks  = intck ('WEEK', date1, date2);
+no_of_days  = intck ('DAY', date1, date2);
+format date1 date2 date9.;
+proc print data = temp;
+run;
