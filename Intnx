@@ -1,8 +1,12 @@
 data temp;
-mydate = '02JAN2017'd;
-nextday =intnx('day', mydate , 1);
+mydate = '02JAN2020'd;
+nextday =intnx('day', mydate , 1, 'end');
+nextweek_end =intnx('week', mydate , 1, 'end');
 nextweek =intnx('week', mydate , 1);
-nextQuarter = intnx('quarter', mydate, 4);
+nextQuarter_end = intnx('quarter', mydate, 1, 'end');
+nextQuarter = intnx('quarter', mydate, 1);
+nextYear_end = intnx('year', mydate, 1, 'end');
 nextYear = intnx('year', mydate, 1);
-format mydate nextday nextweek nextQuarter nextYear date9.;
-run;      
+format mydate nextday nextweek nextQuarter nextYear nextweek_end nextQuarter_end nextYear_end date9.;
+run;
+
