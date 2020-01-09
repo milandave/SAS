@@ -1,0 +1,8 @@
+data temp;
+mydate = '02JAN2017'd;
+nextday =intnx('day', mydate , 1);
+nextweek =intnx('week', mydate , 1);
+nextQuarter = intnx('quarter', mydate, 4);
+nextYear = intnx('year', mydate, 1);
+format mydate nextday nextweek nextQuarter nextYear date9.;
+run;      
