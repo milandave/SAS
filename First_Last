@@ -1,0 +1,32 @@
+data readin;
+input ID Name $ Score;
+cards;
+1     David   45
+1     David   74
+2     Sam     45
+2     Ram     54
+3     Bane    87
+3     Mary    92
+3     Bane    87
+4     Dane    23
+5     Jenny   87
+5     Ken     87
+6     Simran  63
+8     Priya   72
+;
+run;
+
+proc sort data=readin;
+run;
+
+/* ensure to sort source dataset */
+/* FIRST.variablename and LAST.variablename only valid on numeric fields */
+
+
+data temp;
+set WORK.readin;
+By ID;
+a = first.id;
+b = last.id;
+/*If last.name;*/
+run;
