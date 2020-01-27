@@ -1,0 +1,21 @@
+/*sample data*/
+data readin;
+input y1-y6;
+cards;
+11 55 59 35 25 87
+12 79 73 74 86 29
+13 80 95 77 25 74
+;
+run;
+
+/*find the largest and smallest value and its location in the dataset*/
+data out;
+set readin;
+array values y1-y6;
+largest = max(of values[*]);
+index_max = whichn(largest, of values[*]);
+name_max = vname(values[index_max]);
+smallest = min(of values[*]);
+index_min = whichn(smallest, of values[*]);
+name_min = vname(values[index_min]);
+run;
