@@ -1,0 +1,27 @@
+/*sample data*/
+data abcd;
+input x y;
+cards;
+1 25
+1 28
+1 27
+2 23
+2 35
+2 34
+3 25
+3 29
+;
+run;
+
+/*sort data*/
+proc sort data=abcd;
+run;
+
+
+data firsta;
+set abcd;
+retain z;
+if first.x then z=1;
+else z=z+1;
+by x;
+run;
